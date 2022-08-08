@@ -1,0 +1,45 @@
+{
+  "name": "swe/rocketchat-to-space",
+  "description": "Import your channels with its messages from Rocket.Chat to JetBrains Space.",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "type": "project",
+  "keywords": [
+    "rocket-chat",
+    "chat",
+    "space",
+    "jetbrains",
+    "php",
+    "migrate"
+  ],
+  "authors": [
+    {
+      "name": "luca",
+      "email": "l.braun@s-w-e.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "swe/space-sdk": "^v0.0.6",
+    "atdev/rocket-chat": "^1.0",
+    "vlucas/phpdotenv": "^5.4",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Swe\\RTS\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-create-project-cmd": [
+      "php -r \"copy('.env.example', '.env');\""
+    ]
+  },
+  "support": {
+    "email": "info@s-w-e.com"
+  },
+  "config": {
+    "sort-packages": true,
+    "preferred-install": "dist"
+  }
+}
