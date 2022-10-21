@@ -84,7 +84,7 @@ class Collector extends Base
                 continue;
             }
 
-            $created = strtotime($message->getUpdatedAt());
+            $created = (strtotime($message->getUpdatedAt()) * 1000);
 
             while (in_array($created, $creationDates)) {
                 $created += 1;

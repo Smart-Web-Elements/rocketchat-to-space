@@ -51,6 +51,21 @@ class Importer extends Base
     /**
      * @return void
      */
+    public function clearAll(): void
+    {
+        try {
+            $channels = $this->space->chats()->channels()->listAllChannels([], ['data' => ['channelId']]);
+            foreach ($channels as $channel) {
+                $this->space->chats()->channels()->deleteChannel('id:' . $channel['channelId']);
+            }
+        } catch (GuzzleException|MissingArgumentException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function import(): void
     {
         $files = $this->getExportFiles();
@@ -90,13 +105,11 @@ class Importer extends Base
 
                 if ($index < $this->currentIndex) {
                     try {
-                        $data = [
-                            'externalId' => $message['messageId']['externalId'],
-                            'channel' => 'channel:name:' . $channelName,
-                        ];
-                        $this->space->chats()->messages()->getMessage($data);
+                        $messageId = 'externalId:' . $message['messageId']['externalId'];
+                        $channel = 'name:' . $channelName;
+                        $this->space->chats()->messages()->getMessage($channel, $messageId);
                         continue;
-                    } catch (GuzzleException|MissingArgumentException $e) {
+                    } catch (GuzzleException $e) {
                     }
                 }
             }
@@ -163,12 +176,14 @@ class Importer extends Base
         }
 
         if (!empty($subscribers)) {
-            $this->space->chats()->channels()->addUsers([
-                'channel' => 'channel:name:' . $channelName,
-                'profiles' => array_map(function (string $username) {
-                    return 'username:' . $username;
-                }, $subscribers),
-            ]);
+            $this->space->chats()->channels()->subscribers()->users()->addUsersToChannel(
+                'channel:name:' . $channelName,
+                [
+                    'profiles' => array_map(function (string $username) {
+                        return 'username:' . $username;
+                    }, $subscribers),
+                ]
+            );
         }
 
         $this->space->chats()->messages()->importMessages([

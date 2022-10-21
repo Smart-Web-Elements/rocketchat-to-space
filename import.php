@@ -21,7 +21,8 @@ $settings->setSpaceClientSecret($_ENV['SPACE_CLIENT_SECRET']);
 $userMapping = json_decode(file_get_contents(__DIR__ . '/user-mapping.json'), true);
 
 $collector = new Collector($settings, $userMapping);
-$importer = new Importer($settings, $argv[1] ?? '', (int)$argv[2]);
-
 $collector->collect();
+
+$importer = new Importer($settings, $argv[1] ?? '', (int)$argv[2]);
+$importer->clearAll();
 $importer->import();

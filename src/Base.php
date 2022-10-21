@@ -2,6 +2,12 @@
 
 namespace Swe\RTS;
 
+/**
+ * Class Base
+ *
+ * @package Swe\RTS
+ * @author Luca Braun <l.braun@s-w-e.com>
+ */
 abstract class Base
 {
     /**
@@ -17,6 +23,9 @@ abstract class Base
         $this->settings = $settings;
     }
 
+    /**
+     * @return Settings
+     */
     protected function getSettings(): Settings
     {
         return $this->settings;
@@ -32,6 +41,10 @@ abstract class Base
      */
     protected function getExportFiles(): array
     {
+        if (!is_dir($this->settings->getExportDirectory())) {
+            mkdir($this->settings->getExportDirectory());
+        }
+
         $invalid = [
             '.',
             '..',
