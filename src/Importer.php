@@ -59,7 +59,7 @@ class Importer extends Base
                 $this->space->chats()->channels()->deleteChannel('id:' . $channel['channelId']);
             }
         } catch (GuzzleException|MissingArgumentException $e) {
-            echo $e->getMessage();
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 
@@ -112,7 +112,8 @@ class Importer extends Base
                         ];
                         $this->space->chats()->messages()->getMessage($messageId, $request);
                         continue;
-                    } catch (GuzzleException $e) {
+                    } catch (GuzzleException|MissingArgumentException $e) {
+                        echo $e->getMessage() . PHP_EOL;
                     }
                 }
             }
@@ -133,10 +134,9 @@ class Importer extends Base
                     }
                     $newAuthors = [];
                 } catch (GuzzleException|MissingArgumentException $e) {
-                    print $e->getMessage();
-                    print "\nChannel: " . $channelName;
-                    print "\nIndex chunk: " . $index;
-                    print "\n";
+                    print $e->getMessage() . PHP_EOL;
+                    print 'Channel: ' . $channelName . PHP_EOL;
+                    print 'Index chunk: ' . $index . PHP_EOL;
                     exit;
                 }
             }
@@ -149,10 +149,9 @@ class Importer extends Base
             try {
                 $this->importChunk($chunks, $channelName, $topic, $newAuthors);
             } catch (GuzzleException|MissingArgumentException $e) {
-                print $e->getMessage();
-                print "\nChannel: " . $channelName;
-                print "\nIndex chunk: " . $currentIndex;
-                print "\n";
+                print $e->getMessage() . PHP_EOL;
+                print 'Channel: ' . $channelName . PHP_EOL;
+                print 'Index chunk: ' . $currentIndex . PHP_EOL;
                 exit;
             }
         }

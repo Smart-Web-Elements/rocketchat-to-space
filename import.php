@@ -1,6 +1,7 @@
 <?php
 
 use Dotenv\Dotenv;
+use GuzzleHttp\Exception\GuzzleException;
 use Swe\RTS\Collector;
 use Swe\RTS\Importer;
 use Swe\RTS\Settings;
@@ -23,6 +24,12 @@ $userMapping = json_decode(file_get_contents(__DIR__ . '/user-mapping.json'), tr
 $collector = new Collector($settings, $userMapping);
 $collector->collect();
 
-$importer = new Importer($settings, $argv[1] ?? '', (int)$argv[2]);
+try {
+    $importer = new Importer($settings, $argv[1] ?? '', (int)$argv[2]);
+} catch (GuzzleException $e) {
+    echo $e->getMessage() . PHP_EOL;
+    exit(1);
+}
+
 $importer->clearAll();
 $importer->import();
