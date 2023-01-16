@@ -19,8 +19,8 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ^8.0",
-    "swe/space-sdk": "^v1",
+    "php": "^8.1",
+    "swe/space-sdk": "^v2",
     "atdev/rocket-chat": "^1.0",
     "vlucas/phpdotenv": "^5",
     "ext-json": "*"

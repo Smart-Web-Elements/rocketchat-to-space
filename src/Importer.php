@@ -107,7 +107,10 @@ class Importer extends Base
                     try {
                         $messageId = 'externalId:' . $message['messageId']['externalId'];
                         $channel = 'name:' . $channelName;
-                        $this->space->chats()->messages()->getMessage($channel, $messageId);
+                        $request = [
+                            'channel' => $channel
+                        ];
+                        $this->space->chats()->messages()->getMessage($messageId, $request);
                         continue;
                     } catch (GuzzleException $e) {
                     }
@@ -166,7 +169,7 @@ class Importer extends Base
      */
     private function importChunk(array $messages, string $channelName, string $topic, array $subscribers): void
     {
-        if ($this->space->chats()->channels()->isNameFree($channelName)) {
+        if ($this->space->chats()->channels()->isNameFree(['name' => $channelName])) {
             $this->space->chats()->channels()->addNewChannel([
                 'name' => $channelName,
                 'description' => $topic,
